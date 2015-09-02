@@ -29,3 +29,5 @@ containers, the distribution of identities can be put in the hands of the build 
 will still not be visible. Only at startup time, when the Docker fetches secrets through SSL, are secrets transferred
 to the memory of the Docker container. No Environment variables, no mounting of secret files under low permission
 directories. Simple access.
+
+[locker's home is on GitHub](https://github.com/realrolfje/locker)
