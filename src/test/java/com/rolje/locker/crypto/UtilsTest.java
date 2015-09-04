@@ -8,6 +8,7 @@ import junit.framework.TestCase;
 public class UtilsTest extends TestCase {
 
     public void testJECUnlimited() throws Exception {
+        /* Because everyone has the right, no, duty to install strong crypto */
         Utils.validateJCEUnlimited();
     }
 }
