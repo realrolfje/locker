@@ -1,4 +1,4 @@
-package com.rolje.locker.crypto;
+package com.rolfje.locker.crypto;
 
 import javax.crypto.Cipher;
 import java.security.NoSuchAlgorithmException;

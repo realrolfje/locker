@@ -1,4 +1,4 @@
-package com.rolje.locker.crypto;
+package com.rolfje.locker.crypto;
 
 import junit.framework.TestCase;
 
