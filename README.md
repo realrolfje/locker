@@ -3,7 +3,13 @@
 A safe place to store passwords and certificates so that Docker Containers can fetch database connection strings,
 host names and passwords from a central service in a safe, encrypted, secure manner.
 
-## Project Goals:
+## Quick start
+1. Make sure you have Java 1.8 and Maven 3 installed.
+1. Clone this project.
+1. Run `mvn exec:java`
+1. Open [the WADL](http://localhost:8081/api/application.wadl) in a browser or REST client
+
+## Goals:
 
 1. Provides secrets (passwords) to Docker containers through REST calls, based on the Docker's ssl
    certificate (through session token exchange)
