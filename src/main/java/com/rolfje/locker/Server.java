@@ -1,5 +1,6 @@
 package com.rolfje.locker;
 
+import com.rolfje.locker.resources.SecretsResource;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -26,7 +27,7 @@ public class Server {
     }
 
     private static URI getBaseURI() {
-        return UriBuilder.fromUri("http://localhost/api/")
+        return UriBuilder.fromUri("http://localhost/api")
                 .port(8081)
                 .build();
     }
@@ -34,10 +35,13 @@ public class Server {
     private static HttpServer startHttpServer(URI baseUri) {
         long start = System.currentTimeMillis();
 
-        final ResourceConfig rc = new ResourceConfig().packages(Server.class.getPackage().getName());
+        final ResourceConfig rc = new ResourceConfig()
+                .packages(SecretsResource.class.getPackage().getName())
+                .setApplicationName("locker");
+
         HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(baseUri, rc);
 
-        log.info("Locker WADL available at {}application.wadl", baseUri.toString());
+        log.info("Locker WADL available at {}/application.wadl", baseUri.toString());
         log.info("Server started up in " + (System.currentTimeMillis() - start) + "mS.");
         return httpServer;
     }
