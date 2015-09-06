@@ -19,8 +19,8 @@ public class Configuration {
     }
 
     public static URI getBaseURI(){
-        return UriBuilder.fromUri("http://localhost/api")
-                .port(8081)
+        return UriBuilder.fromUri("https://localhost/api")
+                .port(8443)
                 .build();
     }
 }
