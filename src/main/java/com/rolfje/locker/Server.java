@@ -31,6 +31,7 @@ public class Server {
                 .withBaseURI(baseUri)
                 .withKeyStoreFile(Configuration.getServerKeyStore())
                 .withKeyStorePass(Configuration.getServerKeystorePassword())
+                .withAccessLog(Configuration.getAccessLogFile())
                 .buildAndStart();
 
         log.info("Locker WADL available at {}/application.wadl", baseUri.toString());

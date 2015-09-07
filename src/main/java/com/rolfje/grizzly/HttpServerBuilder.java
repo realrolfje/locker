@@ -1,6 +1,5 @@
 package com.rolfje.grizzly;
 
-import com.rolfje.locker.Configuration;
 import com.rolfje.locker.resources.SecretsResource;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.server.accesslog.AccessLogBuilder;
@@ -23,10 +22,13 @@ public class HttpServerBuilder {
     private File keyStoreFile;
     private char[] keyStorePass;
 
+    private File accessLog;
+
     private boolean secure = false;
     private boolean start = false;
     private String applicationName = "application";
     private URI baseUri;
+
 
     public HttpServerBuilder withKeyStoreFile(File keyStoreFile) {
         this.secure = true;
@@ -37,6 +39,11 @@ public class HttpServerBuilder {
     public HttpServerBuilder withKeyStorePass(char[] password) {
         this.secure = true;
         this.keyStorePass = password;
+        return this;
+    }
+
+    public HttpServerBuilder withAccessLog(File accessLog) {
+        this.accessLog = accessLog;
         return this;
     }
 
@@ -57,8 +64,11 @@ public class HttpServerBuilder {
 
         HttpServer httpServer = buildServer(resourceConfig);
 
-        final AccessLogBuilder builder = new AccessLogBuilder(Configuration.getAccessLogFile());
-        builder.instrument(httpServer.getServerConfiguration());
+        if (accessLog != null) {
+            // Add access logging to the server
+            final AccessLogBuilder builder = new AccessLogBuilder(accessLog);
+            builder.instrument(httpServer.getServerConfiguration());
+        }
 
         if (start) {
             try {
@@ -72,11 +82,16 @@ public class HttpServerBuilder {
 
     }
 
+    public HttpServer buildAndStart() {
+        start = true;
+        return build();
+    }
+
     private HttpServer buildServer(ResourceConfig resourceConfig) {
         if (secure) {
             SSLEngineConfigurator sslEngineConfigurator = new SSLEngineConfiguratorBuilder()
-                    .withKeyStoreFile(Configuration.getServerKeyStore())
-                    .withKeyStorePass(Configuration.getServerKeystorePassword())
+                    .withKeyStoreFile(keyStoreFile)
+                    .withKeyStorePass(keyStorePass)
                     .build();
 
             return GrizzlyHttpServerFactory
@@ -85,10 +100,5 @@ public class HttpServerBuilder {
             return GrizzlyHttpServerFactory
                     .createHttpServer(baseUri, resourceConfig, false);
         }
-    }
-
-    public HttpServer buildAndStart() {
-        start = true;
-        return build();
     }
 }

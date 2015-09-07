@@ -20,11 +20,11 @@ public class Configuration {
         return getResources();
     }
 
-    public static char[] getServerKeystorePassword(){
+    public static char[] getServerKeystorePassword() {
         return "defaultpassword".toCharArray();
     }
 
-    public static URI getBaseURI(){
+    public static URI getBaseURI() {
         return UriBuilder.fromUri("https://localhost/api")
                 .port(8443)
                 .build();
