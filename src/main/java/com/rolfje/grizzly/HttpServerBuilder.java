@@ -3,17 +3,23 @@ package com.rolfje.grizzly;
 import com.rolfje.locker.Configuration;
 import com.rolfje.locker.resources.SecretsResource;
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.grizzly.http.server.accesslog.AccessLogBuilder;
 import org.glassfish.grizzly.ssl.SSLEngineConfigurator;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 
 /**
  * Builds a Grizzly HttpServer.
  */
 public class HttpServerBuilder {
+    private static final Logger log = LoggerFactory.getLogger(HttpServerBuilder.class);
+
     private File keyStoreFile;
     private char[] keyStorePass;
 
@@ -49,6 +55,24 @@ public class HttpServerBuilder {
                 .packages(SecretsResource.class.getPackage().getName())
                 .setApplicationName(applicationName);
 
+        HttpServer httpServer = buildServer(resourceConfig);
+
+        final AccessLogBuilder builder = new AccessLogBuilder(Configuration.getAccessLogFile());
+        builder.instrument(httpServer.getServerConfiguration());
+
+        if (start) {
+            try {
+                httpServer.start();
+            } catch (IOException e) {
+                log.error("Failed to start the httpserver.", e);
+            }
+        }
+
+        return httpServer;
+
+    }
+
+    private HttpServer buildServer(ResourceConfig resourceConfig) {
         if (secure) {
             SSLEngineConfigurator sslEngineConfigurator = new SSLEngineConfiguratorBuilder()
                     .withKeyStoreFile(Configuration.getServerKeyStore())
@@ -56,10 +80,10 @@ public class HttpServerBuilder {
                     .build();
 
             return GrizzlyHttpServerFactory
-                    .createHttpServer(baseUri, resourceConfig, secure, sslEngineConfigurator, start);
+                    .createHttpServer(baseUri, resourceConfig, secure, sslEngineConfigurator, false);
         } else {
             return GrizzlyHttpServerFactory
-                    .createHttpServer(baseUri, resourceConfig, start);
+                    .createHttpServer(baseUri, resourceConfig, false);
         }
     }
 

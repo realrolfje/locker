@@ -1,7 +1,11 @@
 package com.rolfje.locker;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.ws.rs.core.UriBuilder;
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 
@@ -10,6 +14,7 @@ import java.net.URL;
  * refactor configuration later to something more dynamic.
  */
 public class Configuration {
+    private static final Logger log = LoggerFactory.getLogger(Configuration.class);
 
     public static File getServerKeyStore() {
         return getResources();
@@ -30,5 +35,16 @@ public class Configuration {
                 .getClassLoader()
                 .getResource("default.jks");
         return new File(resource.getFile());
+    }
+
+    public static File getAccessLogFile() {
+        try {
+            File tempFile = File.createTempFile("locker-access.", ".log");
+            log.info("Access log will be written to " + tempFile.getAbsolutePath());
+            return tempFile;
+        } catch (IOException e) {
+            log.error("Can not create temp file for access logging.", e);
+            return null;
+        }
     }
 }
