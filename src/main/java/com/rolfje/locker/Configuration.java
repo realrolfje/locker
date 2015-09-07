@@ -3,6 +3,7 @@ package com.rolfje.locker;
 import javax.ws.rs.core.UriBuilder;
 import java.io.File;
 import java.net.URI;
+import java.net.URL;
 
 /**
  * Class to hold static configuration. This class is here so we can
@@ -11,16 +12,23 @@ import java.net.URI;
 public class Configuration {
 
     public static File getServerKeyStore() {
-        return new File("serverkeystore.jks");
+        return getResources();
     }
 
     public static char[] getServerKeystorePassword(){
-        return "supersecretpassword".toCharArray();
+        return "defaultpassword".toCharArray();
     }
 
     public static URI getBaseURI(){
         return UriBuilder.fromUri("https://localhost/api")
                 .port(8443)
                 .build();
+    }
+
+    private static File getResources() {
+        URL resource = Configuration.class
+                .getClassLoader()
+                .getResource("default.jks");
+        return new File(resource.getFile());
     }
 }
