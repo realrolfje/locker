@@ -17,8 +17,10 @@ public class Server {
         HttpServer httpServer = startHttpServer();
 
         log.info("Hit enter to stop the server.");
+        //noinspection ResultOfMethodCallIgnored
         System.in.read();
 
+        log.info("Stopping the server.");
         httpServer.shutdownNow();
     }
 
