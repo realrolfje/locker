@@ -40,8 +40,8 @@ public class SSLEngineConfiguratorBuilder {
             log.error("SSLContextConfigurator failed to validate itself");
         }
 
-        return new SSLEngineConfigurator(sslContextConfigurator);
+        return new SSLEngineConfigurator(sslContextConfigurator)
+                .setClientMode(false)
+                .setNeedClientAuth(false);
     }
-
-
 }
