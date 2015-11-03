@@ -2,3 +2,4 @@
 locker.iml
 /target
 .idea
+/src/main/resources/default.jks

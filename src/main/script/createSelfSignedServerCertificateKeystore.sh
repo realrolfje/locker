@@ -4,6 +4,7 @@ commonname=locker
 filename=default
 password=defaultpassword
 outputdirectory=../../../target
+resourcedirectory=../resources
 
 echo
 echo "Removing existing keys, certs and stores from ${outputdirectory}"
@@ -44,6 +45,9 @@ keytool -importkeystore \
 echo
 echo "Generated files:"
 ls -al ${outputdirectory}/${filename}.*
+
+echo "Copied ${filename} to ${resourcedirectory}."
+cp ${outputdirectory}/${filename}.jks ${resourcedirectory}
 
 echo
 echo "${filename}.jks contains the key/cert combination for our https server."

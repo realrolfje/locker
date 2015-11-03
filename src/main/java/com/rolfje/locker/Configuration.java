@@ -17,7 +17,7 @@ public class Configuration {
     private static final Logger log = LoggerFactory.getLogger(Configuration.class);
 
     public static File getServerKeyStore() {
-        return getResources();
+        return getClasspathResources("default.jks");
     }
 
     public static char[] getServerKeystorePassword() {
@@ -30,10 +30,16 @@ public class Configuration {
                 .build();
     }
 
-    private static File getResources() {
+    private static File getClasspathResources(String fileName) {
         URL resource = Configuration.class
                 .getClassLoader()
-                .getResource("default.jks");
+                .getResource(fileName);
+
+        if (resource == null) {
+            log.error("File " + fileName + " not found on the classpath.");
+            return null;
+        }
+
         return new File(resource.getFile());
     }
 

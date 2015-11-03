@@ -6,8 +6,9 @@ host names and passwords from a central service in a safe, encrypted, secure man
 ## Quick start
 1. Make sure you have Java 1.8 and Maven 3 installed.
 1. Clone this project.
-1. Run `mvn exec:java`
-1. Open [the WADL](http://localhost:8081/api/application.wadl) in a browser or REST client
+1. Go to `src/main/script` and run `createSelfSignedServerCertificateKeystore.sh`
+1. Go to back to the project root and run `mvn exec:java`
+1. Open [the WADL](https://localhost:8443/api/application.wadl) in a browser or REST client
 
 ## Goals:
 
